@@ -36,10 +36,10 @@ const LoadingScreen: React.FC = () => (
         <Icon name="harp" className="w-24 h-24 text-[#C5A059] stroke-[0.5px] drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
       </div>
       <div className="mt-14 flex flex-col items-center gap-7 z-10">
-        <h1 className="text-[11px] font-black tracking-[1em] text-[#C5A059] uppercase opacity-0 animate-[text-fade-up_1.2s_ease-out_0.8s_forwards] ml-[1em]">
+        <h1 className="text-[11px] font-black tracking-[1em] text-[#C5A059] uppercase ml-[1em]">
           Apolo Oracle
         </h1>
-        <div className="h-[0.5px] w-40 bg-[#C5A059]/10 relative overflow-hidden opacity-0 animate-[fade-in_1.5s_ease-out_1.2s_forwards]">
+        <div className="h-[0.5px] w-40 bg-[#C5A059]/10 relative overflow-hidden">
           <div className="absolute inset-y-0 left-0 bg-[#C5A059] w-full -translate-x-full animate-[luxury-shimmer_3s_infinite_cubic-bezier(0.65,0,0.35,1)]"></div>
         </div>
       </div>
@@ -67,7 +67,6 @@ const App: React.FC = () => {
 
   const [activeView, setActiveView] = useState<ViewMode>('board');
   const [isAdding, setIsAdding] = useState(false);
-  const [isAddingBirthday, setIsAddingBirthday] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isAiGenerating, setIsAiGenerating] = useState(false);
 
@@ -277,36 +276,70 @@ const App: React.FC = () => {
 
     return (
       <div className="max-w-4xl mx-auto w-full animate-flow">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+        {/* Header de Calendario - Layout Espacioso (Restaurado) */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16">
           <div className="flex items-center gap-4">
-            <select value={month} onChange={(e) => setCalendarDate(new Date(year, parseInt(e.target.value), 1))} className="bg-current/10 border-0 rounded-xl px-4 py-2.5 font-black text-sm text-current outline-none">
+            <select 
+              value={month} 
+              onChange={(e) => setCalendarDate(new Date(year, parseInt(e.target.value), 1))} 
+              className="bg-surface border border-borderMain rounded-xl px-5 py-3 font-black text-sm uppercase tracking-widest text-current cursor-pointer hover:border-accent transition-all"
+            >
               {monthsNames.map((m, i) => <option key={m} value={i}>{m}</option>)}
             </select>
-            <select value={year} onChange={(e) => setCalendarDate(new Date(parseInt(e.target.value), month, 1))} className="bg-current/10 border-0 rounded-xl px-4 py-2.5 font-black text-sm text-current outline-none">
-              {Array.from({ length: 10 }, (_, i) => year - 5 + i).map(y => <option key={y} value={y}>{y}</option>)}
+            <select 
+              value={year} 
+              onChange={(e) => setCalendarDate(new Date(parseInt(e.target.value), month, 1))} 
+              className="bg-surface border border-borderMain rounded-xl px-5 py-3 font-black text-sm uppercase tracking-widest text-current cursor-pointer hover:border-accent transition-all"
+            >
+              {Array.from({ length: 20 }, (_, i) => year - 10 + i).map(y => <option key={y} value={y}>{y}</option>)}
             </select>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setCalendarDate(new Date(year, month - 1, 1))} className="p-3 bg-current/5 hover:bg-current/10 rounded-full transition-all text-current"><Icon name="play" className="w-4 h-4 rotate-180" /></button>
-            <button onClick={() => setCalendarDate(new Date(year, month + 1, 1))} className="p-3 bg-current/5 hover:bg-current/10 rounded-full transition-all text-current"><Icon name="play" className="w-4 h-4" /></button>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setCalendarDate(new Date(year, month - 1, 1))} 
+              className="p-3.5 bg-surface border border-borderMain hover:bg-current/10 rounded-full transition-all text-[#C5A059] active:scale-90"
+            >
+              <Icon name="play" className="w-4 h-4 rotate-180" />
+            </button>
+            <button 
+              onClick={() => setCalendarDate(new Date(year, month + 1, 1))} 
+              className="p-3.5 bg-surface border border-borderMain hover:bg-current/10 rounded-full transition-all text-[#C5A059] active:scale-90"
+            >
+              <Icon name="play" className="w-4 h-4" />
+            </button>
           </div>
         </div>
-        <div className="grid grid-cols-7 gap-2 mb-4">{weekDays.map(d => (<div key={d} className="text-center text-[10px] font-black opacity-30 text-current py-2">{d}</div>))}</div>
-        <div className="grid grid-cols-7 gap-2">
+
+        <div className="grid grid-cols-7 gap-2 mb-4">
+          {weekDays.map(d => (
+            <div key={d} className="text-center text-[11px] font-black opacity-30 text-current py-2 uppercase tracking-widest">{d}</div>
+          ))}
+        </div>
+        
+        <div className="grid grid-cols-7 gap-3">
           {days.map((day, idx) => {
-            if (day === null) return <div key={`empty-${idx}`} className="aspect-square"></div>;
+            if (day === null) return <div key={`empty-${idx}`} className="aspect-square opacity-0"></div>;
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const dayItems = tasks.filter(taskItem => taskItem.dueDate === dateStr);
             const isToday = new Date().toISOString().split('T')[0] === dateStr;
+            
             return (
-              <div key={day} className={`motion-card aspect-square flex flex-col items-center justify-center relative transition-all group cursor-pointer hover:border-accent ${isToday ? 'border-accent ring-2 ring-accent/20' : 'border-transparent'}`} onClick={() => { 
+              <div 
+                key={day} 
+                className={`motion-card aspect-square flex flex-col items-center justify-center relative transition-all group cursor-pointer hover:border-accent/60 ${isToday ? 'border-accent ring-4 ring-accent/10 bg-accent/5' : 'border-current/5'}`} 
+                onClick={() => { 
                   setNewTask({ ...newTask, date: dateStr }); 
                   setIsAdding(true); 
-              }}>
-                <span className={`text-base font-black ${isToday ? 'text-accent' : 'text-current opacity-80'}`}>{day}</span>
-                <div className="flex gap-1 mt-1">
+                }}
+              >
+                <span className={`text-sm md:text-lg font-black ${isToday ? 'text-accent' : 'text-current opacity-70 group-hover:opacity-100'}`}>{day}</span>
+                <div className="flex gap-1 mt-2">
                   {dayItems.slice(0, 3).map(taskItem => (
-                    <div key={taskItem.id} className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: categories.find(c => c.id === taskItem.categoryId)?.color || 'var(--accent-color)' }}></div>
+                    <div 
+                      key={taskItem.id} 
+                      className="w-1.5 h-1.5 rounded-full" 
+                      style={{ backgroundColor: categories.find(c => c.id === taskItem.categoryId)?.color || 'var(--accent-color)' }}
+                    ></div>
                   ))}
                 </div>
               </div>
@@ -361,24 +394,26 @@ const App: React.FC = () => {
         </header>
 
         {activeView === 'board' && (
-          <div className="px-6 md:px-10 py-4 max-w-[1200px] mx-auto w-full flex flex-wrap items-center gap-4 bg-current/[0.01]">
-            <div className="flex items-center gap-2">
-               <span className="text-[9px] font-black uppercase opacity-30">{t('filterBy')}</span>
+          <div className="px-6 md:px-10 py-4 max-w-[1200px] mx-auto w-full flex flex-wrap items-center gap-6 bg-current/[0.01]">
+            <div className="flex items-center gap-4">
+               <span className="text-[10px] font-black uppercase opacity-20 tracking-widest">{t('filterBy')}</span>
+               <div className="flex items-center gap-2">
+                 <select 
+                    value={filterCategory} 
+                    onChange={e => setFilterCategory(e.target.value)}
+                    className="bg-surface border border-borderMain rounded-lg px-4 py-2 text-[10px] font-black uppercase tracking-widest outline-none text-current"
+                  >
+                    <option value="all">{t('allCategories')}</option>
+                    {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  </select>
+                  <input 
+                    type="date" 
+                    value={filterDate}
+                    onChange={e => setFilterDate(e.target.value)}
+                    className="bg-surface border border-borderMain rounded-lg px-4 py-2 text-[10px] font-black uppercase outline-none text-current"
+                  />
+               </div>
             </div>
-            <select 
-              value={filterCategory} 
-              onChange={e => setFilterCategory(e.target.value)}
-              className="bg-current/5 border-0 rounded-lg px-4 py-2 text-[10px] font-black uppercase tracking-widest outline-none text-current"
-            >
-              <option value="all">{t('allCategories')}</option>
-              {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
-            <input 
-              type="date" 
-              value={filterDate}
-              onChange={e => setFilterDate(e.target.value)}
-              className="bg-current/5 border-0 rounded-lg px-4 py-2 text-[10px] font-black uppercase outline-none text-current"
-            />
           </div>
         )}
 
@@ -411,14 +446,9 @@ const App: React.FC = () => {
             <div className="max-w-6xl mx-auto space-y-12 py-6 animate-flow">
               <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-4 space-y-6">
-                  <div className="motion-card p-6 flex flex-col gap-4">
-                    <div className="flex items-center gap-2"><Icon name="bell" className="w-4 h-4 text-[#C5A059]" /><p className="text-[10px] font-black uppercase tracking-widest">{t('manageBirthdays')}</p></div>
-                    <button onClick={() => setIsAddingBirthday(true)} className="w-full py-3 bg-[#C5A059] text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-[#C5A059]/20">{t('addBirthday')}</button>
-                  </div>
-
                   <div className="motion-card p-6 flex flex-col gap-3">
                     <p className="text-[10px] font-black opacity-50 uppercase tracking-widest">{t('lang')}</p>
-                    <select value={language} onChange={(e) => setLanguage(e.target.value)} className="w-full bg-current/5 border border-current/10 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-accent text-current">
+                    <select value={language} onChange={(e) => setLanguage(e.target.value)} className="w-full bg-surface border border-borderMain rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-accent text-current">
                       {languageOptions.map(l => (
                         <option key={l.code} value={l.code}>{l.name}</option>
                       ))}
@@ -491,7 +521,7 @@ const App: React.FC = () => {
                       <div className="space-y-8">
                         <div className="space-y-3">
                           <label className="text-[10px] font-black uppercase tracking-widest opacity-40">{t('fontLabel')}</label>
-                          <select value={customFont || themeConfigs[currentTheme].font} onChange={(e) => setCustomFont(e.target.value)} className="w-full bg-current/5 border border-current/10 rounded-xl px-4 py-3 text-sm font-bold outline-none text-current">
+                          <select value={customFont || themeConfigs[currentTheme].font} onChange={(e) => setCustomFont(e.target.value)} className="w-full bg-surface border border-borderMain rounded-xl px-4 py-3 text-sm font-bold outline-none text-current">
                             {fonts.map(f => <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>{t(f.name)}</option>)}
                           </select>
                         </div>
@@ -554,7 +584,7 @@ const App: React.FC = () => {
                     <h3 className="text-[10px] font-black uppercase tracking-widest">{t('description')}</h3>
                   </div>
                   <textarea 
-                    className="w-full bg-white/5 rounded-2xl p-6 text-sm leading-relaxed border border-white/5 outline-none focus:border-[#C5A059]/30 min-h-[120px]"
+                    className="w-full bg-white/5 rounded-2xl p-6 text-sm leading-relaxed border border-white/5 outline-none focus:border-[#C5A059]/30 min-h-[120px] text-white"
                     placeholder={t('placeholder')}
                     value={selectedTask.description}
                     onChange={(e) => {
@@ -618,27 +648,6 @@ const App: React.FC = () => {
                     </div>
                   </div>
                </section>
-
-               {/* History */}
-               <section className="space-y-4 pt-6 border-t border-white/5">
-                  <div className="flex items-center gap-2 opacity-30">
-                    <Icon name="clock" className="w-4 h-4" />
-                    <h3 className="text-[10px] font-black uppercase tracking-widest">{t('historyLog')}</h3>
-                  </div>
-                  <div className="space-y-4">
-                     {selectedTask.history.slice().reverse().map((h, i) => (
-                       <div key={i} className="flex gap-4 items-start">
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#C5A059] mt-1.5 shadow-[0_0_8px_rgba(197,160,89,0.5)]"></div>
-                          <div>
-                            <p className="text-xs text-white/80">{h.action}</p>
-                            <p className="text-[8px] font-black uppercase opacity-20 mt-1">
-                              {new Date(h.date).toLocaleString(language, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                            </p>
-                          </div>
-                       </div>
-                     ))}
-                  </div>
-               </section>
             </div>
           </div>
         </div>
@@ -678,7 +687,7 @@ const App: React.FC = () => {
                     type="date" 
                     value={newTask.date}
                     onChange={e => setNewTask({...newTask, date: e.target.value})}
-                    className="w-full bg-white/5 border-0 rounded-xl px-6 py-4.5 text-sm font-bold text-white outline-none"
+                    className="w-full bg-surface border border-borderMain rounded-xl px-6 py-4.5 text-sm font-bold text-white outline-none"
                   />
                </div>
             </div>
