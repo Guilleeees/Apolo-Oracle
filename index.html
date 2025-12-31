@@ -105,15 +105,15 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; }
 
-    /* Tailwind-style animation classes if not present */
     .animate-in { animation-duration: 0.5s; animation-fill-mode: both; }
     .fade-in { animation-name: fade-in; }
     .zoom-in { animation-name: zoom-in; }
-    .slide-in-from-bottom-4 { animation-name: slide-in-from-bottom; }
     .slide-in-from-bottom-6 { animation-name: slide-in-from-bottom; }
-    .slide-in-from-bottom-12 { animation-name: slide-in-from-bottom; }
   </style>
   <script>
+    // Shim para evitar errores de process.env en producción
+    window.process = { env: { API_KEY: "" } };
+    
     tailwind.config = {
       theme: {
         extend: {
@@ -140,5 +140,7 @@
 </head>
 <body>
   <div id="root"></div>
+  <!-- IMPORTANTE: Ejecutar el script principal -->
+  <script type="module" src="./index.tsx"></script>
 </body>
 </html>

@@ -6,11 +6,15 @@ export class GeminiService {
   constructor() {}
 
   private getAI() {
-    return new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const apiKey = process.env.API_KEY || "";
+    return new GoogleGenAI({ apiKey });
   }
 
   async analyzeTask(taskTitle: string, taskDesc: string): Promise<AISuggestion> {
     try {
+      const apiKey = process.env.API_KEY;
+      if (!apiKey) throw new Error("API_KEY_MISSING");
+
       const ai = this.getAI();
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
@@ -39,31 +43,37 @@ export class GeminiService {
       return JSON.parse(text || "{}") as AISuggestion;
     } catch (error) {
       console.error("Oracle Analysis Error:", error);
-      throw error;
+      return { subtasks: ["Error: No se pudo conectar con el Oráculo. Verifica tu API Key."], estimatedTime: "N/A" };
     }
   }
 
   async quickChat(prompt: string, attachment?: { data: string, mimeType: string }): Promise<string> {
-    const parts: any[] = [{ text: prompt }];
-    
-    if (attachment) {
-      parts.push({
-        inlineData: {
-          data: attachment.data,
-          mimeType: attachment.mimeType
+    try {
+      if (!process.env.API_KEY) return "El Oráculo requiere una llave sagrada (API Key) para hablar. Por favor, configúrala en Vercel.";
+      
+      const parts: any[] = [{ text: prompt }];
+      
+      if (attachment) {
+        parts.push({
+          inlineData: {
+            data: attachment.data,
+            mimeType: attachment.mimeType
+          }
+        });
+      }
+
+      const ai = this.getAI();
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: { parts },
+        config: {
+          systemInstruction: "Tu nombre es APOLO. Eres un estratega personal de élite y consultor de la Orden (ORDO). Tu tono es extremadamente educado, minimalista y sofisticado. IMPORTANTE: Está terminantemente prohibido usar asteriscos, almohadillas, guiones o cualquier símbolo de formato Markdown. Escribe en párrafos limpios, usando solo letras y puntuación. Tu respuesta debe leerse como una carta de lujo, un consejo de un mentor distinguido o un pergamino sagrado. Sé directo, inspirador y preciso."
         }
       });
+      return response.text || "";
+    } catch (e) {
+      return "El Oráculo ha perdido la conexión con las estrellas.";
     }
-
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: { parts },
-      config: {
-        systemInstruction: "Tu nombre es APOLO. Eres un estratega personal de élite y consultor de la Orden (ORDO). Tu tono es extremadamente educado, minimalista y sofisticado. IMPORTANTE: Está terminantemente prohibido usar asteriscos, almohadillas, guiones o cualquier símbolo de formato Markdown. Escribe en párrafos limpios, usando solo letras y puntuación. Tu respuesta debe leerse como una carta de lujo, un consejo de un mentor distinguido o un pergamino sagrado. Sé directo, inspirador y preciso."
-      }
-    });
-    return response.text || "";
   }
 
   async generateText(prompt: string, systemInstruction: string): Promise<string> {
