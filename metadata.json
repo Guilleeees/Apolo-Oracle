@@ -1,0 +1,8 @@
+{
+  "name": "ORDO",
+  "description": "Minimalist task management powered by Gemini AI.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

@@ -1,0 +1,46 @@
+
+export const translations: Record<string, any> = {
+  es: {
+    board: "Tablero", calendar: "Calendario", history: "Historial", settings: "Ajustes",
+    reminders: "Cumpleaños", isReminder: "Cumpleaños", isTask: "Tarea", yearly: "Anual",
+    newTask: "Nueva Tarea", todo: "Pendiente", doing: "En curso", done: "Hecho",
+    empty: "Vacío", cancel: "Cancelar", create: "Crear", lang: "Idioma",
+    design: "Diseño", restore: "Restaurar", aiPrompt: "¿Ayuda?", placeholder: "¿Qué hay que hacer?",
+    date: "Fecha", time: "Hora", allDay: "Todo el día", apolo: "Apolo", addBirthday: "Añadir Cumpleaños",
+    manageBirthdays: "Gestión de Cumpleaños", birthdayName: "Nombre", day: "Día", month: "Mes",
+    themes: "Temas Maestros", fontLabel: "Tipografía", textureLabel: "Textura de Fondo",
+    opacityLabel: "Intensidad", accentLabel: "Color de Acento", customColor: "Personalizado",
+    historyTitle: "Historial de Tareas", theme_oracle: "Oracle", theme_classic: "Estándar",
+    theme_midnight: "Medianoche", theme_nord: "Àrtico", theme_light: "Minimal",
+    theme_brutal: "Brutalista", theme_glass: "Vitra", theme_soft: "Candy",
+    theme_cyber: "Neon", theme_forest: "Natura", theme_marble: "Galería",
+    theme_high_contrast: "Accesible", font_modern: "Modern Sans", font_technical: "Technical Mono",
+    font_geometric: "Geometric Grotesk", font_elegant: "Elegant Serif", font_friendly: "Friendly Lexend",
+    undo: "Deshacer", taskArchived: "Tarea Archivada",
+    filterBy: "Filtrar por", all: "Todo", allCategories: "Todas las categorías", 
+    category: "Categoría", description: "Descripción", subtasks: "Subtareas",
+    generateSubtasks: "Generar con IA", historyLog: "Registro de Actividad",
+    save: "Guardar", delete: "Eliminar", addCategory: "Nueva Categoría",
+    catName: "Nombre de Categoría", catColor: "Color", manageCategories: "Gestionar Categorías",
+    created: "Tarea creada", statusChanged: "Estado cambiado a", subtaskAdded: "Subtarea añadida",
+    subtaskToggled: "Subtarea actualizada", comingSoon: "próximamente"
+  },
+  en: {
+    board: "Board", calendar: "Calendar", history: "History", settings: "Settings",
+    reminders: "Birthdays", isReminder: "Birthday", isTask: "Task", yearly: "Yearly",
+    newTask: "New Task", todo: "Todo", doing: "Doing", done: "Done",
+    empty: "Empty", cancel: "Cancel", create: "Create", lang: "Language",
+    design: "Design", restore: "Restore", aiPrompt: "Help?", placeholder: "What to do?",
+    date: "Date", time: "Time", allDay: "All Day", apolo: "Apolo", addBirthday: "Add Birthday",
+    manageBirthdays: "Birthdays", birthdayName: "Name", day: "Day", month: "Month",
+    themes: "Master Themes", fontLabel: "Typography", textureLabel: "Texture",
+    opacityLabel: "Intensity", accentLabel: "Accent", customColor: "Custom",
+    historyTitle: "History", undo: "Undo", taskArchived: "Archived",
+    category: "Category", description: "Description", subtasks: "Subtasks",
+    generateSubtasks: "Generate with AI", historyLog: "Activity Log",
+    save: "Save", delete: "Delete", addCategory: "New Category",
+    catName: "Category Name", catColor: "Color", manageCategories: "Manage Categories",
+    created: "Task created", statusChanged: "Status changed to", subtaskAdded: "Subtask added",
+    subtaskToggled: "Subtask updated", comingSoon: "coming soon"
+  }
+};
