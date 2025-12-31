@@ -393,30 +393,6 @@ const App: React.FC = () => {
           )}
         </header>
 
-        {activeView === 'board' && (
-          <div className="px-6 md:px-10 py-4 max-w-[1200px] mx-auto w-full flex flex-wrap items-center gap-6 bg-current/[0.01]">
-            <div className="flex items-center gap-4">
-               <span className="text-[10px] font-black uppercase opacity-20 tracking-widest">{t('filterBy')}</span>
-               <div className="flex items-center gap-2">
-                 <select 
-                    value={filterCategory} 
-                    onChange={e => setFilterCategory(e.target.value)}
-                    className="bg-surface border border-borderMain rounded-lg px-4 py-2 text-[10px] font-black uppercase tracking-widest outline-none text-current"
-                  >
-                    <option value="all">{t('allCategories')}</option>
-                    {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                  </select>
-                  <input 
-                    type="date" 
-                    value={filterDate}
-                    onChange={e => setFilterDate(e.target.value)}
-                    className="bg-surface border border-borderMain rounded-lg px-4 py-2 text-[10px] font-black uppercase outline-none text-current"
-                  />
-               </div>
-            </div>
-          </div>
-        )}
-
         <div className="flex-1 overflow-y-auto px-6 md:px-10 pb-32 md:pb-10 custom-scrollbar max-w-[1200px] mx-auto w-full pt-6">
           <div className="animate-[luxury-reveal_0.8s_ease-out_forwards]">
             {activeView === 'board' && (
