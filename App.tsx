@@ -36,10 +36,10 @@ const LoadingScreen: React.FC = () => (
         <Icon name="harp" className="w-24 h-24 text-[#C5A059] stroke-[0.5px] drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
       </div>
       <div className="mt-14 flex flex-col items-center gap-7 z-10">
-        <h1 className="text-[11px] font-black tracking-[1em] text-[#C5A059] uppercase ml-[1em]">
+        <h1 className="text-[11px] font-black tracking-[1em] text-[#C5A059] uppercase ml-[1em] opacity-0 animate-[text-fade-up_1.2s_ease-out_0.8s_forwards]">
           Apolo Oracle
         </h1>
-        <div className="h-[0.5px] w-40 bg-[#C5A059]/10 relative overflow-hidden">
+        <div className="h-[0.5px] w-40 bg-[#C5A059]/10 relative overflow-hidden opacity-0 animate-[fade-in_1.5s_ease-out_1.2s_forwards]">
           <div className="absolute inset-y-0 left-0 bg-[#C5A059] w-full -translate-x-full animate-[luxury-shimmer_3s_infinite_cubic-bezier(0.65,0,0.35,1)]"></div>
         </div>
       </div>
@@ -368,7 +368,7 @@ const App: React.FC = () => {
           <div className="w-10 h-10 bg-[#C5A059] rounded-xl flex items-center justify-center shadow-xl shadow-[#C5A059]/10">
             <Icon name="harp" className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-xl font-black tracking-tighter text-current">ORDO</h1>
+          <h1 className="text-xl font-black tracking-tighter text-current">APOLO</h1>
         </div>
         <nav className="flex-1 space-y-2">
           {[{ id: 'board', icon: 'globe', label: 'board' }, { id: 'calendar', icon: 'play', label: 'calendar' }, { id: 'apolo', icon: 'harp', label: 'apolo' }, { id: 'settings', icon: 'settings', label: 'settings' }].map(item => (
@@ -383,7 +383,7 @@ const App: React.FC = () => {
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         <header className="px-6 md:px-10 py-6 flex items-center justify-between max-w-[1200px] mx-auto w-full border-b border-current/5">
           <div>
-            <h2 className="text-2xl md:text-3xl font-black tracking-tight uppercase text-current">
+            <h2 className="text-2xl md:text-3xl font-black tracking-tight uppercase text-current animate-in slide-in-from-bottom-6">
               {activeView === 'apolo' ? 'Apolo Oracle' : t(activeView)}
             </h2>
             <p className="text-[10px] font-black opacity-30 tracking-[0.2em] mt-1 uppercase">{new Date().toLocaleDateString(language, { month: 'long', day: 'numeric', year: 'numeric' })}</p>
@@ -418,120 +418,122 @@ const App: React.FC = () => {
         )}
 
         <div className="flex-1 overflow-y-auto px-6 md:px-10 pb-32 md:pb-10 custom-scrollbar max-w-[1200px] mx-auto w-full pt-6">
-          {activeView === 'board' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              {(['todo', 'doing'] as TaskStatus[]).map((status) => (
-                <div key={status} className="flex flex-col gap-6">
-                  <div className="flex items-center justify-between border-b border-current/10 pb-3 px-1">
-                    <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#C5A059]">{t(status)}</h3>
-                    <span className="text-[9px] font-black bg-current/5 px-2 py-0.5 rounded-md opacity-30">{filteredTasks.filter(taskItem => taskItem.status === status).length}</span>
-                  </div>
-                  <div className="flex flex-col gap-6">
-                    {filteredTasks.filter(taskItem => taskItem.status === status).length === 0 ? (
-                      <div className="py-20 border-2 border-dashed border-current/5 rounded-3xl flex flex-col items-center justify-center opacity-20">
-                        <Icon name="harp" className="w-12 h-12 mb-4" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">{t('empty')}</span>
-                      </div>
-                    ) : filteredTasks.filter(taskItem => taskItem.status === status).map(task => renderTaskCard(task))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeView === 'calendar' && renderCalendar()}
-          {activeView === 'apolo' && <div className="h-full flex flex-col w-full animate-flow"><AICopilot language={language} tasks={tasks} onSuggest={() => {}} onUpdateTasks={setTasks} /></div>}
-          
-          {activeView === 'settings' && (
-            <div className="max-w-6xl mx-auto space-y-12 py-6 animate-flow">
-              <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div className="lg:col-span-4 space-y-6">
-                  <div className="motion-card p-6 flex flex-col gap-3">
-                    <p className="text-[10px] font-black opacity-50 uppercase tracking-widest">{t('lang')}</p>
-                    <select value={language} onChange={(e) => setLanguage(e.target.value)} className="w-full bg-surface border border-borderMain rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-accent text-current">
-                      {languageOptions.map(l => (
-                        <option key={l.code} value={l.code}>{l.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="lg:col-span-8 space-y-6">
-                  <div className="motion-card p-8">
-                    <div className="flex items-center gap-2 mb-8 border-b border-current/10 pb-4">
-                       <Icon name="settings" className="w-5 h-5 text-[#C5A059]" />
-                       <h3 className="text-xs font-black uppercase tracking-[0.3em] text-current">{t('manageCategories')}</h3>
+          <div className="animate-[luxury-reveal_0.8s_ease-out_forwards]">
+            {activeView === 'board' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                {(['todo', 'doing'] as TaskStatus[]).map((status) => (
+                  <div key={status} className="flex flex-col gap-6">
+                    <div className="flex items-center justify-between border-b border-current/10 pb-3 px-1">
+                      <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#C5A059]">{t(status)}</h3>
+                      <span className="text-[9px] font-black bg-current/5 px-2 py-0.5 rounded-md opacity-30">{filteredTasks.filter(taskItem => taskItem.status === status).length}</span>
                     </div>
-                    <div className="space-y-4">
-                      {categories.map(cat => (
-                        <div key={cat.id} className="flex items-center gap-4 bg-current/5 p-3 rounded-xl border border-current/10">
-                          <input 
-                            type="color" 
-                            value={cat.color} 
-                            onChange={(e) => setCategories(categories.map(c => c.id === cat.id ? { ...c, color: e.target.value } : c))}
-                            className="w-10 h-10 rounded-lg border-0 bg-transparent cursor-pointer"
-                          />
-                          <input 
-                            type="text" 
-                            value={cat.name} 
-                            onChange={(e) => setCategories(categories.map(c => c.id === cat.id ? { ...c, name: e.target.value.toUpperCase() } : c))}
-                            className="bg-transparent border-0 font-bold text-sm text-current outline-none flex-1"
-                          />
-                          <button 
-                            onClick={() => setCategories(categories.filter(c => c.id !== cat.id))}
-                            className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
-                          >
-                            <Icon name="trash" className="w-4 h-4" />
-                          </button>
+                    <div className="flex flex-col gap-6">
+                      {filteredTasks.filter(taskItem => taskItem.status === status).length === 0 ? (
+                        <div className="py-20 border-2 border-dashed border-current/5 rounded-3xl flex flex-col items-center justify-center opacity-20">
+                          <Icon name="harp" className="w-12 h-12 mb-4" />
+                          <span className="text-[10px] font-black uppercase tracking-widest">{t('empty')}</span>
                         </div>
-                      ))}
-                      <button 
-                        onClick={() => setCategories([...categories, { id: Math.random().toString(36).substr(2, 9), name: 'NUEVA', color: '#C5A059' }])}
-                        className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-current/10 rounded-xl opacity-40 hover:opacity-100 hover:border-[#C5A059] transition-all"
-                      >
-                        <Icon name="plus" className="w-4 h-4" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">{t('addCategory')}</span>
-                      </button>
+                      ) : filteredTasks.filter(taskItem => taskItem.status === status).map(task => renderTaskCard(task))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeView === 'calendar' && renderCalendar()}
+            {activeView === 'apolo' && <div className="h-full flex flex-col w-full"><AICopilot language={language} tasks={tasks} onSuggest={() => {}} onUpdateTasks={setTasks} /></div>}
+            
+            {activeView === 'settings' && (
+              <div className="max-w-6xl mx-auto space-y-12 py-6">
+                <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                  <div className="lg:col-span-4 space-y-6">
+                    <div className="motion-card p-6 flex flex-col gap-3">
+                      <p className="text-[10px] font-black opacity-50 uppercase tracking-widest">{t('lang')}</p>
+                      <select value={language} onChange={(e) => setLanguage(e.target.value)} className="w-full bg-surface border border-borderMain rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-accent text-current">
+                        {languageOptions.map(l => (
+                          <option key={l.code} value={l.code}>{l.name}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 
-                  <div className="motion-card p-8">
-                    <div className="flex items-center gap-2 mb-8 border-b border-current/10 pb-4">
-                       <Icon name="zap" className="w-5 h-5 text-[#C5A059]" />
-                       <h3 className="text-xs font-black uppercase tracking-[0.3em] text-current">{t('design')}</h3>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                      <div className="space-y-6">
-                        <label className="text-[10px] font-black uppercase tracking-widest opacity-40">{t('themes')}</label>
-                        <div className="grid grid-cols-3 gap-3">
-                          {Object.entries(themeConfigs).map(([key, config]: [string, any]) => (
+                  <div className="lg:col-span-8 space-y-6">
+                    <div className="motion-card p-8">
+                      <div className="flex items-center gap-2 mb-8 border-b border-current/10 pb-4">
+                         <Icon name="settings" className="w-5 h-5 text-[#C5A059]" />
+                         <h3 className="text-xs font-black uppercase tracking-[0.3em] text-current">{t('manageCategories')}</h3>
+                      </div>
+                      <div className="space-y-4">
+                        {categories.map(cat => (
+                          <div key={cat.id} className="flex items-center gap-4 bg-current/5 p-3 rounded-xl border border-current/10">
+                            <input 
+                              type="color" 
+                              value={cat.color} 
+                              onChange={(e) => setCategories(categories.map(c => c.id === cat.id ? { ...c, color: e.target.value } : c))}
+                              className="w-10 h-10 rounded-lg border-0 bg-transparent cursor-pointer"
+                            />
+                            <input 
+                              type="text" 
+                              value={cat.name} 
+                              onChange={(e) => setCategories(categories.map(c => c.id === cat.id ? { ...c, name: e.target.value.toUpperCase() } : c))}
+                              className="bg-transparent border-0 font-bold text-sm text-current outline-none flex-1"
+                            />
                             <button 
-                              key={key} 
-                              onClick={() => { setCurrentTheme(key as DesignTheme); setCustomAccent(null); }}
-                              className={`flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all ${currentTheme === key ? 'border-[#C5A059] bg-[#C5A059]/10' : 'border-current/10 bg-current/[0.02] hover:bg-current/5'}`}
+                              onClick={() => setCategories(categories.filter(c => c.id !== cat.id))}
+                              className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                             >
-                              <div className="w-full aspect-video rounded-lg shadow-inner overflow-hidden" style={{ backgroundColor: config.bg }}>
-                                <div className="h-1/2 w-full mt-2 ml-2 rounded-tl-lg" style={{ backgroundColor: config.surface }}></div>
-                              </div>
-                              <span className="text-[9px] font-black uppercase">{t(config.label)}</span>
+                              <Icon name="trash" className="w-4 h-4" />
                             </button>
-                          ))}
-                        </div>
+                          </div>
+                        ))}
+                        <button 
+                          onClick={() => setCategories([...categories, { id: Math.random().toString(36).substr(2, 9), name: 'NUEVA', color: '#C5A059' }])}
+                          className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-current/10 rounded-xl opacity-40 hover:opacity-100 hover:border-[#C5A059] transition-all"
+                        >
+                          <Icon name="plus" className="w-4 h-4" />
+                          <span className="text-[10px] font-black uppercase tracking-widest">{t('addCategory')}</span>
+                        </button>
                       </div>
-                      <div className="space-y-8">
-                        <div className="space-y-3">
-                          <label className="text-[10px] font-black uppercase tracking-widest opacity-40">{t('fontLabel')}</label>
-                          <select value={customFont || themeConfigs[currentTheme].font} onChange={(e) => setCustomFont(e.target.value)} className="w-full bg-surface border border-borderMain rounded-xl px-4 py-3 text-sm font-bold outline-none text-current">
-                            {fonts.map(f => <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>{t(f.name)}</option>)}
-                          </select>
+                    </div>
+
+                    <div className="motion-card p-8">
+                      <div className="flex items-center gap-2 mb-8 border-b border-current/10 pb-4">
+                         <Icon name="zap" className="w-5 h-5 text-[#C5A059]" />
+                         <h3 className="text-xs font-black uppercase tracking-[0.3em] text-current">{t('design')}</h3>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div className="space-y-6">
+                          <label className="text-[10px] font-black uppercase tracking-widest opacity-40">{t('themes')}</label>
+                          <div className="grid grid-cols-3 gap-3">
+                            {Object.entries(themeConfigs).map(([key, config]: [string, any]) => (
+                              <button 
+                                key={key} 
+                                onClick={() => { setCurrentTheme(key as DesignTheme); setCustomAccent(null); }}
+                                className={`flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all ${currentTheme === key ? 'border-[#C5A059] bg-[#C5A059]/10' : 'border-current/10 bg-current/[0.02] hover:bg-current/5'}`}
+                              >
+                                <div className="w-full aspect-video rounded-lg shadow-inner overflow-hidden" style={{ backgroundColor: config.bg }}>
+                                  <div className="h-1/2 w-full mt-2 ml-2 rounded-tl-lg" style={{ backgroundColor: config.surface }}></div>
+                                </div>
+                                <span className="text-[9px] font-black uppercase">{t(config.label)}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="space-y-8">
+                          <div className="space-y-3">
+                            <label className="text-[10px] font-black uppercase tracking-widest opacity-40">{t('fontLabel')}</label>
+                            <select value={customFont || themeConfigs[currentTheme].font} onChange={(e) => setCustomFont(e.target.value)} className="w-full bg-surface border border-borderMain rounded-xl px-4 py-3 text-sm font-bold outline-none text-current">
+                              {fonts.map(f => <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>{t(f.name)}</option>)}
+                            </select>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </section>
-            </div>
-          )}
+                </section>
+              </div>
+            )}
+          </div>
         </div>
 
         {showUndo && (
