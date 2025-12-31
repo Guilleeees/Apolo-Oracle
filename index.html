@@ -100,7 +100,41 @@
       background: var(--surface-color);
       border-top: var(--border-width) solid var(--surface-border);
     }
+
+    /* Estilos mejorados para Selectores (Desplegables) */
+    select {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23C5A059'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 1rem center !important;
+      background-size: 1.2em !important;
+      padding-right: 3rem !important;
+      cursor: pointer;
+      line-height: 1.5;
+    }
+
+    /* Forzar fondo oscuro en las opciones del sistema */
+    option {
+      background-color: #0c0c0c !important;
+      color: #f8fafc !important;
+      padding: 12px !important;
+    }
+
+    /* Estilos para inputs de fecha */
+    input[type="date"] {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      position: relative;
+    }
     
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(70%) sepia(20%) saturate(1000%) hue-rotate(5deg);
+      opacity: 0.5;
+      cursor: pointer;
+    }
+
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; }
@@ -111,7 +145,6 @@
     .slide-in-from-bottom-6 { animation-name: slide-in-from-bottom; }
   </style>
   <script>
-    // Shim para evitar errores de process.env en producción
     window.process = { env: { API_KEY: "" } };
     
     tailwind.config = {
@@ -140,7 +173,6 @@
 </head>
 <body>
   <div id="root"></div>
-  <!-- IMPORTANTE: Ejecutar el script principal -->
   <script type="module" src="./index.tsx"></script>
 </body>
 </html>

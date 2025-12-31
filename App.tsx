@@ -17,7 +17,6 @@ const languageOptions = [
   { code: 'ja', name: '日本語' }
 ];
 
-// Definition of fonts for the theme settings
 const fonts = [
   { name: 'font_modern', value: "'Inter', sans-serif" },
   { name: 'font_technical', value: "'JetBrains Mono', monospace" },
@@ -280,10 +279,10 @@ const App: React.FC = () => {
       <div className="max-w-4xl mx-auto w-full animate-flow">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
           <div className="flex items-center gap-4">
-            <select value={month} onChange={(e) => setCalendarDate(new Date(year, parseInt(e.target.value), 1))} className="bg-current/10 border-0 rounded-xl px-4 py-2 font-black text-sm text-current outline-none">
+            <select value={month} onChange={(e) => setCalendarDate(new Date(year, parseInt(e.target.value), 1))} className="bg-current/10 border-0 rounded-xl px-4 py-2.5 font-black text-sm text-current outline-none">
               {monthsNames.map((m, i) => <option key={m} value={i}>{m}</option>)}
             </select>
-            <select value={year} onChange={(e) => setCalendarDate(new Date(parseInt(e.target.value), month, 1))} className="bg-current/10 border-0 rounded-xl px-4 py-2 font-black text-sm text-current outline-none">
+            <select value={year} onChange={(e) => setCalendarDate(new Date(parseInt(e.target.value), month, 1))} className="bg-current/10 border-0 rounded-xl px-4 py-2.5 font-black text-sm text-current outline-none">
               {Array.from({ length: 10 }, (_, i) => year - 5 + i).map(y => <option key={y} value={y}>{y}</option>)}
             </select>
           </div>
@@ -420,14 +419,9 @@ const App: React.FC = () => {
                   <div className="motion-card p-6 flex flex-col gap-3">
                     <p className="text-[10px] font-black opacity-50 uppercase tracking-widest">{t('lang')}</p>
                     <select value={language} onChange={(e) => setLanguage(e.target.value)} className="w-full bg-current/5 border border-current/10 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-accent text-current">
-                      {languageOptions.map(l => {
-                          const isSpecial = l.code === 'en' || l.code === 'es';
-                          return (
-                            <option key={l.code} value={l.code}>
-                              {l.name}{!isSpecial ? ` (${t('comingSoon')})` : ''}
-                            </option>
-                          );
-                      })}
+                      {languageOptions.map(l => (
+                        <option key={l.code} value={l.code}>{l.name}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -684,7 +678,7 @@ const App: React.FC = () => {
                     type="date" 
                     value={newTask.date}
                     onChange={e => setNewTask({...newTask, date: e.target.value})}
-                    className="w-full bg-white/5 border-0 rounded-xl px-6 py-4 text-sm font-bold text-white outline-none"
+                    className="w-full bg-white/5 border-0 rounded-xl px-6 py-4.5 text-sm font-bold text-white outline-none"
                   />
                </div>
             </div>
