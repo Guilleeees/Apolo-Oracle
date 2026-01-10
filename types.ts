@@ -1,40 +1,34 @@
 
+export type Priority = 'urgent' | 'high' | 'normal' | 'low';
 export type TaskStatus = 'todo' | 'doing' | 'done';
-export type TaskType = 'task' | 'reminder';
-
-export interface Category {
-  id: string;
-  name: string;
-  color: string;
-}
-
-export interface SubTask {
-  id: string;
-  title: string;
-  completed: boolean;
-}
-
-export interface TaskHistoryEntry {
-  date: number;
-  action: string;
-}
 
 export interface Task {
   id: string;
   title: string;
   description: string;
   status: TaskStatus;
-  type: TaskType;
-  isYearly?: boolean;
-  isAllDay?: boolean;
-  categoryId: string;
-  subtasks: SubTask[];
-  history: TaskHistoryEntry[];
+  priority: Priority;
+  dueDate: string; // ISO String
   createdAt: number;
-  dueDate?: string; // Formato YYYY-MM-DD
-  dueTime?: string; // Formato HH:mm
 }
 
+export interface Reminder {
+  id: string;
+  name: string;
+  date: string; // ISO String for day/month or specific year
+  type: 'birthday' | 'event';
+}
+
+export type AppFont = 'Playfair Display' | 'Inter' | 'Lexend' | 'Space Grotesk' | 'JetBrains Mono' | 'Montserrat';
+
+export interface ThemeConfig {
+  bg: string;
+  surface: string;
+  accent: string;
+  font: AppFont;
+}
+
+// Added AISuggestion interface to fix the import error in geminiService.ts
 export interface AISuggestion {
   subtasks: string[];
   estimatedTime: string;

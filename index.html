@@ -4,120 +4,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Apolo Oracle — Luxury Task OS</title>
+  <title>Apolo Oracle — Luxury OS</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Grotesk:wght@300;500;700&family=Playfair+Display:ital,wght@0,700;1,700&family=JetBrains+Mono:wght@400;700&family=Lexend:wght@300;600;800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Grotesk:wght@300;500;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Lexend:wght@300;600;800&family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --spring-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
       --bg-color: #050505;
       --surface-color: #0c0c0c;
-      --surface-border: rgba(197, 160, 89, 0.2);
-      --text-color: #f8fafc;
-      --text-muted: rgba(255,255,255,0.4);
       --accent-color: #C5A059;
-      --border-radius: 1.25rem;
-      --border-width: 1px;
-      --glass-blur: 0px;
       --font-main: 'Inter', sans-serif;
     }
 
-    /* REVELATION ANIMATIONS */
-    @keyframes luxury-reveal {
-      0% { transform: scale(0.8) translateY(20px); opacity: 0; filter: blur(10px); }
-      100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
-    }
-
-    @keyframes text-fade-up {
-      0% { transform: translateY(15px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes luxury-shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    @keyframes flow { 0% { transform: translateY(10px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
-    @keyframes bottom-sheet { 0% { transform: translateY(100%); } 100% { transform: translateY(0); } }
-    
-    .animate-flow { animation: flow 0.8s var(--spring-easing) forwards; }
-    .animate-bottom-sheet { animation: bottom-sheet 0.6s var(--spring-easing) forwards; }
-    
     body {
       font-family: var(--font-main);
       background-color: var(--bg-color);
-      color: var(--text-color);
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-      overflow-x: hidden;
+      color: #f8fafc;
+      overflow: hidden;
+      margin: 0;
+      transition: background-color 0.5s ease;
     }
     
-    #root { height: 100vh; display: flex; flex-direction: column; }
+    #root { height: 100vh; width: 100vw; }
     
     .motion-card {
       background-color: var(--surface-color);
-      border: var(--border-width) solid var(--surface-border);
-      border-radius: var(--border-radius);
-      transition: all 0.4s var(--spring-easing);
+      border: 1px solid rgba(197, 160, 89, 0.1);
+      border-radius: 1.5rem;
+      transition: all 0.3s var(--spring-easing);
     }
 
-    /* ELIMINACIÓN TOTAL DE ESTILOS NATIVOS BLANCOS */
+    .motion-card:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px -15px rgba(197, 160, 89, 0.15);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; }
+
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up { animation: fade-in-up 0.4s ease-out forwards; }
+
+    @keyframes splash-intro {
+      0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-splash { animation: splash-intro 1s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+    
     select, input, textarea {
-      background-color: #0c0c0c !important;
-      color: #f8fafc !important;
-      border: 1px solid rgba(197, 160, 89, 0.3) !important;
+      background-color: rgba(255,255,255,0.03) !important;
+      color: inherit !important;
+      border: 1px solid rgba(197, 160, 89, 0.1) !important;
+      border-radius: 0.75rem !important;
+      padding: 0.75rem 1rem !important;
       outline: none !important;
-      -webkit-appearance: none !important;
-      appearance: none !important;
-      box-shadow: none !important;
     }
+    select:focus, input:focus { border-color: var(--accent-color) !important; }
 
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23C5A059'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
-      background-repeat: no-repeat !important;
-      background-position: right 0.8rem center !important;
-      background-size: 0.9em !important;
-      padding-right: 2.2rem !important;
+    /* Glass effect for hotbar */
+    .hotbar-glass {
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
-
-    /* Para móviles que fuerzan fondos en focus */
-    select:focus, input:focus {
-      background-color: #111 !important;
-      border-color: #C5A059 !important;
-    }
-
-    option {
-      background-color: #0c0c0c !important;
-      color: #f8fafc !important;
-    }
-
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      filter: invert(0.8) sepia(1) saturate(5) hue-rotate(10deg);
-      opacity: 0.6;
-    }
-
-    .btn-bounce:active { transform: scale(0.96); opacity: 0.9; }
-
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; }
-
-    .animate-in { animation-duration: 0.5s; animation-fill-mode: both; }
-    .fade-in { animation-name: fade-in; }
-    .zoom-in { animation-name: zoom-in; }
-    .slide-in-from-bottom-6 { animation-name: slide-in-from-bottom; }
-
-    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes zoom-in { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    @keyframes slide-in-from-bottom { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
   <script>
     window.process = { env: { API_KEY: "" } };
-    tailwind.config = {
-      theme: { extend: { colors: { accent: '#C5A059', surface: '#0c0c0c', borderMain: 'rgba(197, 160, 89, 0.2)' } } }
-    }
   </script>
 <script type="importmap">
 {

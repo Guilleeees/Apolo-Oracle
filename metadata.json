@@ -1,6 +1,6 @@
 {
-  "name": "ORDO",
-  "description": "Minimalist task management powered by Gemini AI.",
+  "name": "Apolo Oracle V4",
+  "description": "Enterprise-grade luxury task management system with Google Classroom integration and AI Copilot.",
   "requestFramePermissions": [
     "camera",
     "microphone"
